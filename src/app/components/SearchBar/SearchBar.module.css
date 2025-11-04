@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c3dced; /* usando sua paleta clara */
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #356b8c; /* sua cor azul principal */
+  color: white;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #003760; /* tom mais escuro */
+}

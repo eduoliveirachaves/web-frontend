@@ -3,6 +3,7 @@ import HeroBanner from "./components/HeroBanner/HeroBanner";
 import ProductList from "./components/ProductList/ProductList";
 import Footer from "./components/Footer/Footer";
 import { Product } from "./types";
+import TestArea from "./components/TestArea/TestArea";
 
 // Dados de exemplo para seus produtos
 // Em um projeto real, isso viria de um banco de dados
@@ -42,6 +43,7 @@ export default function Home() {
         <div className="flex flex-col gap-12">
           <HeroBanner />
           <ProductList products={featuredProducts} />
+          <TestArea products={featuredProducts}/>
         </div>
       </main>
 

@@ -40,7 +40,6 @@ const TestArea: React.FC<TestAreaProps> = ({ products }) => {
 
       <hr className="my-8 border-t-2" />
       <h2 className="text-2xl font-bold text-center">Teste CartItem</h2>
-      <CartItem item={mockCartItem} /> 
 
       <hr className="my-8 border-t-2" />
       <h2 className="text-2xl font-bold text-center">Teste Sidebar + Resumo</h2>
@@ -50,7 +49,6 @@ const TestArea: React.FC<TestAreaProps> = ({ products }) => {
           <CartSummary subtotal={mockCartItem.price * mockCartItem.quantity} shipping={15.00} />
         </div>
       </div>
-      
       {/* --- FIM DA ÁREA DE TESTE --- */}
     </div>
   );

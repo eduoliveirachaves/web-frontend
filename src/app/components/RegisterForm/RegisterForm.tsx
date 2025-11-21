@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
+
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ const RegisterForm: React.FC = () => {
     password: '',
     confirmPassword: ''
   });
+  const router = useRouter();
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,6 +30,8 @@ const RegisterForm: React.FC = () => {
     // Simulação do cadastro
     console.log('Dados do Cadastro:', formData);
     alert('Cadastro simulado com sucesso! Verifique o console.');
+    router.push("/login");
+
   };
 
   return (
@@ -45,7 +51,7 @@ const RegisterForm: React.FC = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Seu nome completo"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
             required
           />
         </div>
@@ -61,7 +67,7 @@ const RegisterForm: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="seu@email.com"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
             required
           />
         </div>
@@ -77,7 +83,7 @@ const RegisterForm: React.FC = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="••••••••"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
             required
           />
         </div>
@@ -93,7 +99,7 @@ const RegisterForm: React.FC = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder="••••••••"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
             required
           />
         </div>

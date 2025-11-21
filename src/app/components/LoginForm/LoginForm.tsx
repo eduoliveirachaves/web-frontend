@@ -1,16 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Simulação da lógica de login
     console.log('Tentativa de Login:', { email, password });
     alert('Login simulado! Verifique o console.');
+    router.push("/");
   };
 
   return (
@@ -29,7 +34,7 @@ const LoginForm: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="seu@email.com"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
             required
           />
         </div>
@@ -44,7 +49,7 @@ const LoginForm: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+            className="w-full px-4 py-2 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
             required
           />
         </div>
@@ -57,12 +62,13 @@ const LoginForm: React.FC = () => {
         </button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 mt-4">
-        Não tem uma conta?{' '}
-        <a href="#" className="text-blue-600 hover:underline">
+      <p className="text-sm text-gray-600 mt-4">
+        Não tem uma conta?{" "}
+        <Link href="/register" className="text-blue-600 hover:underline">
           Cadastre-se
-        </a>
+        </Link>
       </p>
+
     </div>
   );
 };

@@ -1,27 +1,46 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { useAuth } from '@/app/context/AuthContext'; // 1. Importa o contexto de Auth
 
 const LoginForm: React.FC = () => {
+  const { login } = useAuth(); // 2. Pega a função de login real
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulação da lógica de login
-    console.log('Tentativa de Login:', { email, password });
-    alert('Login simulado! Verifique o console.');
-    router.push("/");
+    setError('');
+    setLoading(true);
+
+    try {
+      // 3. Chama a função que vai no backend (authService -> login)
+      await login(email, password);
+      
+      // Não precisa de router.push aqui porque o AuthContext já redireciona para '/' após o sucesso
+    } catch (err) {
+      console.error(err);
+      setError('Falha no login. Verifique seu e-mail e senha.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Acessar Conta</h2>
       
+      {/* Exibe mensagem de erro se houver */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         
         <div>
@@ -56,13 +75,14 @@ const LoginForm: React.FC = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50"
         >
-          Entrar
+          {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
 
-      <p className="text-sm text-gray-600 mt-4">
+      <p className="text-sm text-gray-600 mt-4 text-center">
         Não tem uma conta?{" "}
         <Link href="/register" className="text-blue-600 hover:underline">
           Cadastre-se

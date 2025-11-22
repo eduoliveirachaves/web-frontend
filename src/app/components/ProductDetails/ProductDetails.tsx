@@ -3,15 +3,17 @@
 import React from 'react';
 import Image from 'next/image';
 import { Product } from '@/app/types'; 
+import { useCart } from '@/app/context/CartContext'; 
 
 interface ProductDetailsProps {
   product: Product;
 }
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
-  
+  const { addToCart } = useCart();
+
   const handleAddToCart = () => {
-    console.log(`Botão 'Adicionar ao Carrinho' clicado para: ${product.name}`);
+    addToCart(product); 
   };
 
   return (
@@ -19,7 +21,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
       
       <div className="w-full md:w-1/2 relative h-96">
         <Image
-          src={product.imageUrl}
+          src={product.imageUrl || '/window.svg'} 
           alt={product.name}
           layout="fill"
           objectFit="cover"
@@ -31,11 +33,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
         <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
         
         <p className="text-gray-700">
-          Descrição de exemplo do produto. Mais detalhes sobre o item incrível que você está prestes a comprar.
+          {product.description || "Descrição de exemplo do produto. Mais detalhes sobre o item incrível que você está prestes a comprar."}
         </p>
         
         <p className="text-4xl font-light text-gray-800">
-          R$ {product.price.toFixed(2)}
+          R$ {Number(product.price).toFixed(2)}
         </p>
         
         <button 

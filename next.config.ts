@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**', // Permite qualquer caminho de imagem nesse domínio
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.mos.cms.futurecdn.net',
+        port: '',
+        pathname: '/**', // Novo domínio adicionado para corrigir o erro
+      },
     ],
   },
   /* config options here */

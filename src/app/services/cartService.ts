@@ -1,6 +1,6 @@
 import { Order } from "../types";
 
-const API_URL = "http://localhost:3000"; 
+const API_URL = "https://web-backend-sck9.onrender.com"; 
 
 export const cartService = {
   async getOrder(orderId: string): Promise<Order> {

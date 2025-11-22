@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from "next/link";
-import { useAuth } from '@/app/context/AuthContext'; // 1. Importa o contexto de Auth
+import Link from 'next/link';
+import { useAuth } from '@/app/context/AuthContext';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const LoginForm: React.FC = () => {
-  const { login } = useAuth(); // 2. Pega a função de login real
-  
+  const { login } = useAuth();
+  const searchParams = useSearchParams(); // usar o dado (email) enviado pelo redirect da pagina de registro
+  const router = useRouter(); // limpar a rota
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,10 +21,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
 
     try {
-      // 3. Chama a função que vai no backend (authService -> login)
       await login(email, password);
-      
-      // Não precisa de router.push aqui porque o AuthContext já redireciona para '/' após o sucesso
     } catch (err) {
       console.error(err);
       setError('Falha no login. Verifique seu e-mail e senha.');
@@ -33,7 +33,7 @@ const LoginForm: React.FC = () => {
   return (
     <div className="w-full max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Acessar Conta</h2>
-      
+
       {/* Exibe mensagem de erro se houver */}
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center">
@@ -42,7 +42,6 @@ const LoginForm: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        
         <div>
           <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-1">
             E-mail
@@ -83,12 +82,11 @@ const LoginForm: React.FC = () => {
       </form>
 
       <p className="text-sm text-gray-600 mt-4 text-center">
-        Não tem uma conta?{" "}
+        Não tem uma conta?{' '}
         <Link href="/register" className="text-blue-600 hover:underline">
           Cadastre-se
         </Link>
       </p>
-
     </div>
   );
 };

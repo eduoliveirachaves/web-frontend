@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Order, Product } from '@/app/types';
 import { cartService } from '@/app/services/cartService';
-import { useAuth } from './AuthContext'; 
+import { useAuth } from './AuthContext';
 
 interface CartContextType {
   cart: Order | null;
@@ -27,13 +27,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     const savedOrderId = localStorage.getItem('my_order_id');
-    
+
     // Só carrega se tivermos um usuário E um ID de pedido salvo
     if (savedOrderId && userId) {
       loadCart(savedOrderId);
     } else {
-        // Se o usuário deslogar, limpamos o estado do carrinho visualmente
-        setCart(null);
+      // Se o usuário deslogar, limpamos o estado do carrinho visualmente
+      setCart(null);
     }
   }, [userId]); // Recarrega quando o usuário muda (login/logout)
 
@@ -43,7 +43,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const orderData = await cartService.getOrder(orderId);
       setCart(orderData);
     } catch (error) {
-      console.error("Erro ao carregar carrinho:", error);
+      console.error('Erro ao carregar carrinho:', error);
       // Se o pedido não for encontrado (ex: foi pago ou deletado), limpa o localStorage
       localStorage.removeItem('my_order_id');
       setCart(null);
@@ -54,8 +54,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = async (product: Product) => {
     if (!userId) {
-        alert("Por favor, faça login para adicionar produtos ao carrinho.");
-        return;
+      alert('Por favor, faça login para adicionar produtos ao carrinho.');
+      return;
     }
 
     try {
@@ -64,37 +64,37 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!currentOrderId) {
         // Tenta recuperar do localStorage primeiro caso o state esteja vazio mas o ID exista
         const storedId = localStorage.getItem('my_order_id');
-        
+
         if (storedId) {
-             currentOrderId = storedId;
+          currentOrderId = storedId;
         } else {
-            const newOrder = await cartService.createOrder(userId);
-            currentOrderId = newOrder.id;
-            localStorage.setItem('my_order_id', currentOrderId); 
-            setCart(newOrder); 
+          const newOrder = await cartService.createOrder(userId);
+          currentOrderId = newOrder.id;
+          localStorage.setItem('my_order_id', currentOrderId);
+          setCart(newOrder);
         }
       }
 
       await cartService.addItem(currentOrderId, product.id, 1);
-      
+
       await loadCart(currentOrderId);
-      alert("Produto adicionado!");
+      alert('Produto adicionado!');
     } catch (error) {
-      console.error("Erro ao adicionar:", error);
-      alert("Erro ao adicionar produto. Tente novamente.");
+      console.error('Erro ao adicionar:', error);
+      alert('Erro ao adicionar produto. Tente novamente.');
     }
   };
 
   const updateQuantity = async (itemId: string, quantity: number) => {
     if (!cart) return;
     await cartService.updateItemQuantity(cart.id, itemId, quantity);
-    await loadCart(cart.id); 
+    await loadCart(cart.id);
   };
 
   const removeItem = async (itemId: string) => {
     if (!cart) return;
     await cartService.removeItem(cart.id, itemId);
-    await loadCart(cart.id); 
+    await loadCart(cart.id);
   };
 
   return (

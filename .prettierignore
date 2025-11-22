@@ -1,0 +1,28 @@
+# Ignore artifacts
+node_modules
+.next
+.build
+.DS_Store
+/dist
+/out
+/public
+/.vercel
+
+# Ignore environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore lockfiles
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Editor folders
+.vscode
+
+# Misc
+coverage
+

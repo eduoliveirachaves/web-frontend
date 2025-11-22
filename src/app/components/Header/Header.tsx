@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     console.log('Buscando por:', query);
   };
 
-  const { cart } =  useCart();
+  const { cart } = useCart();
 
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
@@ -20,11 +20,11 @@ const Header: React.FC = () => {
         <Link href="/" className="text-2xl font-bold text-gray-800">
           🛒 E-commerce
         </Link>
-        
+
         <div className="w-full md:w-1/2">
           <SearchBar onSearch={handleSearch} placeholder="Buscar produtos..." />
         </div>
-        
+
         <nav className="flex gap-4">
           <Link href="/categories" className="text-gray-600 hover:text-gray-900">
             Categorias

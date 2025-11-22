@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,css,md,html}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,css,md,html}\""
   },
   "dependencies": {
     "next": "15.5.0",
@@ -25,6 +27,7 @@
     "@typescript-eslint/parser": "^8.47.0",
     "eslint": "^9.38.0",
     "eslint-config-next": "^16.0.3",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

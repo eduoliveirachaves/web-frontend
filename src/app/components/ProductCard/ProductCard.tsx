@@ -14,7 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="relative w-full h-48">
           <Image
             // CORREÇÃO AQUI: Se imageUrl for vazio ou nulo, usa '/window.svg'
-            src={product.imageUrl || '/window.svg'} 
+            src={product.imageUrl || '/window.svg'}
             alt={product.name}
             layout="fill"
             objectFit="cover"

@@ -1,23 +1,23 @@
-import Header from "./components/Header/Header";
-import HeroBanner from "./components/HeroBanner/HeroBanner";
-import ProductList from "./components/ProductList/ProductList";
-import Footer from "./components/Footer/Footer";
-import { Product } from "./types";
+import Header from './components/Header/Header';
+import HeroBanner from './components/HeroBanner/HeroBanner';
+import ProductList from './components/ProductList/ProductList';
+import Footer from './components/Footer/Footer';
+import { Product } from './types';
 
 // Função para buscar produtos do backend
 async function getProducts(): Promise<Product[]> {
   try {
     // Usando a URL do backend
-    const res = await fetch('https://web-backend-sck9.onrender.com/products', { 
-      cache: 'no-store' // garante que sempre pega dados novos
+    const res = await fetch('https://web-backend-sck9.onrender.com/products', {
+      cache: 'no-store', // garante que sempre pega dados novos
     });
-    
+
     if (!res.ok) return [];
-    
+
     // O backend retorna "ProductDto", precisamos garantir que bata com a interface "Product"
     return res.json();
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    console.error('Erro ao buscar produtos:', error);
     return [];
   }
 }

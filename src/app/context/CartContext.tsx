@@ -52,7 +52,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       console.log("🛒 Dados do carrinho:", orderData);
       setCart(orderData);
     } catch (error) {
-      console.error("Erro ao carregar carrinho:", error);
+      console.error('Erro ao carregar carrinho:', error);
       // Se o pedido não for encontrado (ex: foi pago ou deletado), limpa o localStorage
       localStorage.removeItem("my_order_id");
       setCart(null);
@@ -87,10 +87,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       await cartService.addItem(currentOrderId, product.id, 1);
 
       await loadCart(currentOrderId);
-      alert("Produto adicionado!");
+      alert('Produto adicionado!');
     } catch (error) {
-      console.error("Erro ao adicionar:", error);
-      alert("Erro ao adicionar produto. Tente novamente.");
+      console.error('Erro ao adicionar:', error);
+      alert('Erro ao adicionar produto. Tente novamente.');
     }
   };
 

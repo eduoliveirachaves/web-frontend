@@ -2,29 +2,31 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm: React.FC = () => {
   const { register } = useAuth();
-  
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    age: '' // Backend exige idade
+    age: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não coincidem!');
       return;
@@ -33,16 +35,16 @@ const RegisterForm: React.FC = () => {
     setLoading(true);
 
     try {
-      // Monta o objeto conforme o DTO do backend
       await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
         passwordConfirmation: formData.confirmPassword,
-        age: Number(formData.age) // Converte para number
+        age: Number(formData.age),
       });
-      
-      alert('Cadastro realizado com sucesso! Faça login.');
+
+      // apos o registro bem sucedido redireciona para a pagina de login enviando o email
+      router.replace(`/login?registered=1&email=${encodeURIComponent(formData.email)}`);
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Erro ao cadastrar. Verifique os dados.');
@@ -54,7 +56,7 @@ const RegisterForm: React.FC = () => {
   return (
     <div className="w-full max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Criar Nova Conta</h2>
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center">
           {error}
@@ -62,7 +64,6 @@ const RegisterForm: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        
         <div>
           <label htmlFor="register-name" className="block text-sm font-medium text-gray-700 mb-1">
             Nome Completo
@@ -113,7 +114,10 @@ const RegisterForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="register-password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="register-password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Senha (mín. 8 caracteres)
           </label>
           <input
@@ -130,7 +134,10 @@ const RegisterForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="confirm-password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Confirmar Senha
           </label>
           <input

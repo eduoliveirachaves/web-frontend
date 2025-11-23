@@ -6,16 +6,16 @@ Este repositório é referente ao front-end de um sistema de **E-commerce** dese
 
 O front-end deste projeto foi construído com as seguintes tecnologias:
 
-* **[Next.js](https://nextjs.org/)**: Framework React para renderização no servidor e geração de sites estáticos. 
-* **[React](https://react.dev/)**: Biblioteca para construir interfaces de usuário. (Base de todos os componentes `.tsx`).
-* **[TypeScript](https://www.typescriptlang.org/)**: Superset do JavaScript que adiciona tipagem estática. (Usado para definir tipos e nos componentes).
-* **[Tailwind CSS](https://tailwindcss.com/)**: Framework CSS "utility-first" para estilização rápida. (Importado em `src/app/globals.css` e usado em componentes como `Header.tsx` e `ProductCard.tsx`).
-* **CSS Modules**: Para estilos componentizados e escopados. (Utilizado no `SearchBar.module.css`).
+- **[Next.js](https://nextjs.org/)**: Framework React para renderização no servidor e geração de sites estáticos.
+- **[React](https://react.dev/)**: Biblioteca para construir interfaces de usuário. (Base de todos os componentes `.tsx`).
+- **[TypeScript](https://www.typescriptlang.org/)**: Superset do JavaScript que adiciona tipagem estática. (Usado para definir tipos e nos componentes).
+- **[Tailwind CSS](https://tailwindcss.com/)**: Framework CSS "utility-first" para estilização rápida. (Importado em `src/app/globals.css` e usado em componentes como `Header.tsx` e `ProductCard.tsx`).
+- **CSS Modules**: Para estilos componentizados e escopados. (Utilizado no `SearchBar.module.css`).
 
 ## 👨‍💻 Equipe / Autoria
 
-* Eduardo Chaves
-* Guilherme Mulatinho
-* Felipe Probst
-* Matheus Piccoli
-* Matheus Pereira
+- Eduardo Chaves
+- Guilherme Mulatinho
+- Felipe Probst
+- Matheus Piccoli
+- Matheus Pereira

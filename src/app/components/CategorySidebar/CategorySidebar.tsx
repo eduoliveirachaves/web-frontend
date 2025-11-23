@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { Category } from '@/app/types'; 
+import { Category } from '@/app/types';
 
 interface CategorySidebarProps {
-  categories: Category[]; 
+  categories: Category[];
 }
 const CategorySidebar: React.FC<CategorySidebarProps> = ({ categories }) => {
   return (
@@ -13,7 +13,7 @@ const CategorySidebar: React.FC<CategorySidebarProps> = ({ categories }) => {
         <ul className="space-y-2">
           {categories.map((category) => (
             <li key={category.id}>
-              <Link 
+              <Link
                 href={`/categories/${category.slug}`}
                 className="block text-gray-600 hover:text-blue-600 hover:font-semibold transition"
               >

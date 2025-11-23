@@ -13,7 +13,7 @@ export interface CartItem extends Product {
 export interface Category {
   id: string;
   name: string;
-  slug: string; 
+  slug: string;
 }
 export interface OrderItem {
   id: string;

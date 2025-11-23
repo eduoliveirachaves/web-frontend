@@ -27,31 +27,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('auth_token');
-    if (storedToken) {
-      setToken(storedToken);
-      authService.getMe(storedToken)
-        .then(userData => setUser(userData))
-        .catch(() => logout()) 
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
+	// verifica se tem token no localStorage e se o token eh valido
+	useEffect(() => {
+		const storedToken = localStorage.getItem('auth_token');
+		if (storedToken) {
+			setToken(storedToken);
+			authService
+				.getMe(storedToken)
+				.then((userData: any) => setUser(userData))
+				.catch(() => logout())
+				.finally(() => setIsLoading(false));
+		} else {
+			setIsLoading(false);
+		}
+	}, []);
 
   const login = async (email: string, pass: string) => {
     try {
       const data = await authService.login(email, pass);
       const token = data.token;
-      
+
       localStorage.setItem('auth_token', token);
       setToken(token);
 
       const userData = await authService.getMe(token);
       setUser(userData);
 
-      router.push('/'); 
+      router.push('/');
     } catch (error) {
       console.error(error);
       throw error;
@@ -60,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = async (data: any) => {
     await authService.register(data);
-    router.push('/login'); 
+    router.push('/login');
   };
 
   const logout = () => {

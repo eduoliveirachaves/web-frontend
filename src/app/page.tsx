@@ -14,7 +14,6 @@ async function getProducts(): Promise<Product[]> {
 			return [];
 		}
 
-		// Onde você faz o fetch dos produtos
 		const res = await fetch(`${backendUrl}/products`, {
 			next: { revalidate: 60 } // Atualiza a cada 60 segundos os produtos
 		});

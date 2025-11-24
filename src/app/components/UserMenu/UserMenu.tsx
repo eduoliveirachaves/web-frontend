@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { useAuth } from "@/app/context/AuthContext";
+import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/app/context/AuthContext';
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuth();
@@ -16,17 +16,17 @@ const UserMenu: React.FC = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .slice(0, 2);
   };
@@ -38,23 +38,16 @@ const UserMenu: React.FC = () => {
         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:outline-none"
       >
         <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm">
-          {getInitials(user?.name || "U")}
+          {getInitials(user?.name || 'U')}
         </div>
         <span className="hidden md:inline">{user?.name}</span>
         <svg
-          className={`w-4 h-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
@@ -68,18 +61,18 @@ const UserMenu: React.FC = () => {
             Minha Conta
           </Link>
           <Link
-            href="/meus-pedidos"
+            href="/profile"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setIsOpen(false)}
+          >
+            Perfil
+          </Link>
+          <Link
+            href="/orders"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setIsOpen(false)}
           >
             Meus Pedidos
-          </Link>
-          <Link
-            href="/meus-dados"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => setIsOpen(false)}
-          >
-            Meus Dados
           </Link>
           <Link
             href="/enderecos"

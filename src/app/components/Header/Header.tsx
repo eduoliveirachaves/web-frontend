@@ -7,6 +7,7 @@ import { useCart } from '@/app/context/CartContext';
 import { useAuth } from '@/app/context/AuthContext';
 import { useWishlist } from '@/app/context/WishlistContext';
 import { Heart } from 'lucide-react';
+import UserMenu from '../UserMenu/UserMenu';
 
 const Header: React.FC = () => {
   const handleSearch = (query: string) => {
@@ -14,7 +15,7 @@ const Header: React.FC = () => {
   };
 
   const { cart } = useCart();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { items: wishlistItems } = useWishlist();
 
   const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
@@ -22,12 +23,6 @@ const Header: React.FC = () => {
   const cartLabel = totalItems > 0 ? `Carrinho com ${totalItems} itens` : 'Carrinho vazio';
   const wishlistLabel =
     totalWishlist > 0 ? `Favoritos com ${totalWishlist} itens` : 'Favoritos vazio';
-
-  const getUserName = (fullName: string) => {
-    const names = fullName.split(' ');
-    if (names.length === 1) return names[0];
-    return `${names[0]} ${names[names.length - 1]}`;
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -87,27 +82,7 @@ const Header: React.FC = () => {
           {/* ===User autenticado ou nao === */}
           <div className="border-l pl-3 md:pl-5 border-gray-200">
             {user ? (
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex flex-col items-end">
-                  <span className="text-xs text-gray-500">Bem-vindo,</span>
-                  <span className="text-sm font-semibold text-gray-800 truncate max-w-[150px]">
-                    {getUserName(user.name)}
-                  </span>
-                </div>
-                <Link
-                  href="/profile"
-                  className="text-sm font-medium text-blue-600 border border-blue-600/80 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-                  title="Meu Perfil"
-                >
-                  Meu Perfil
-                </Link>
-                <button
-                  onClick={logout}
-                  className="text-sm font-medium text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600/40"
-                >
-                  Sair
-                </button>
-              </div>
+              <UserMenu />
             ) : (
               <div className="flex items-center gap-3">
                 <Link

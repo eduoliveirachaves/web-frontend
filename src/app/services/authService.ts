@@ -1,4 +1,4 @@
-const API_URL = 'https://web-backend-sck9.onrender.com'; // TODO: Não está comunicando com o backend, provavelmente por causa do CORS. Verificar depois.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://web-backend-sck9.onrender.com';
 
 export const authService = {
   async login(email: string, password: string) {

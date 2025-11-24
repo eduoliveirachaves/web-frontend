@@ -1,6 +1,6 @@
 import { Order } from '../types';
 
-const API_URL = "https://web-backend-sck9.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://web-backend-sck9.onrender.com';
 
 export const cartService = {
   async getOrder(orderId: string): Promise<Order> {
@@ -11,9 +11,9 @@ export const cartService = {
 
   async createOrder(userId: string): Promise<Order> {
     const res = await fetch(`${API_URL}/order`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, status: "IN_CART", items: [] }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, status: 'IN_CART', items: [] }),
     });
     return res.json();
   },

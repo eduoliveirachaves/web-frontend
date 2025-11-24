@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useAuth } from '@/app/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function MeusPedidosPage() {
   const { user, isLoading } = useAuth();
@@ -10,7 +10,7 @@ export default function MeusPedidosPage() {
 
   React.useEffect(() => {
     if (!isLoading && !user) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [user, isLoading, router]);
 

@@ -165,7 +165,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <CartContext.Provider value={{ cart, isLoading, addToCart, updateQuantity, removeItem, clearLocalCart }}>
+    <CartContext.Provider
+      value={{ cart, isLoading, addToCart, updateQuantity, removeItem, clearLocalCart }}
+    >
       {children}
     </CartContext.Provider>
   );

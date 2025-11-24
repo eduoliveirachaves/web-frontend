@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Rating } from '@/app/types';
 import { ratingService } from '@/app/services/ratingService';
-import { useAuth } from '@/app/context/AuthContext'; 
+import { useAuth } from '@/app/context/AuthContext';
 import StarRating from '../StarRating/StarRating';
 import Link from 'next/link';
 
@@ -12,10 +12,10 @@ interface ReviewsSectionProps {
 }
 
 const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
-  const { user, token } = useAuth(); 
+  const { user, token } = useAuth();
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [newRate, setNewRate] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -25,7 +25,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
       const data = await ratingService.getRatingsByProduct(productId);
       setRatings(data);
     } catch (error) {
-      console.error("Erro ao carregar avaliações", error);
+      console.error('Erro ao carregar avaliações', error);
     } finally {
       setLoading(false);
     }
@@ -37,21 +37,22 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Tentando enviar...", { user, token, newRate });
+    console.log('Tentando enviar...', { user, token, newRate });
     if (!token || !user) {
-        alert("Você precisa estar logado para avaliar!");
+      alert('Você precisa estar logado para avaliar!');
+      return;
     }
-    if (newRate === 0) return alert("Por favor, selecione uma nota!");
+    if (newRate === 0) return alert('Por favor, selecione uma nota!');
 
     setSubmitting(true);
     try {
       await ratingService.createRating(productId, user.id, newRate, newComment, token);
       setNewRate(0);
       setNewComment('');
-      await loadRatings(); 
-      alert("Avaliação enviada com sucesso!");
+      await loadRatings();
+      alert('Avaliação enviada com sucesso!');
     } catch (error) {
-      alert("Erro ao enviar: " + error);
+      alert('Erro ao enviar: ' + error);
     } finally {
       setSubmitting(false);
     }
@@ -70,17 +71,13 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
           ratings.map((rating) => (
             <div key={rating.id} className="bg-gray-50 p-4 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <div className="font-semibold text-gray-800">
-                  {rating.user?.name || "Usuário"}
-                </div>
+                <div className="font-semibold text-gray-800">{rating.user?.name || 'Usuário'}</div>
                 <span className="text-xs text-gray-500">
                   {new Date(rating.createdAt).toLocaleDateString()}
                 </span>
               </div>
               <StarRating rating={rating.rate} size={16} />
-              {rating.comment && (
-                <p className="mt-2 text-gray-700 text-sm">{rating.comment}</p>
-              )}
+              {rating.comment && <p className="mt-2 text-gray-700 text-sm">{rating.comment}</p>}
             </div>
           ))
         )}
@@ -88,7 +85,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
 
       <div className="bg-white border p-6 rounded-lg shadow-sm">
         <h3 className="text-lg font-semibold mb-4">Deixe sua avaliação</h3>
-        
+
         {user ? (
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -112,7 +109,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ productId }) => {
               disabled={submitting}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition"
             >
-              {submitting ? "Enviando..." : "Enviar Avaliação"}
+              {submitting ? 'Enviando...' : 'Enviar Avaliação'}
             </button>
           </form>
         ) : (

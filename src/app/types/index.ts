@@ -31,13 +31,45 @@ export interface Order {
   items: OrderItem[];
 }
 
+export interface Address {
+  id: string;
+  userId: string;
+  street: string;
+  number: string;
+  complement?: string | null;
+  city: string;
+  state: string;
+  cep: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface CreateAddressDto {
+  userId: string;
+  street: string;
+  number: string;
+  complement?: string;
+  city: string;
+  state: string;
+  cep: string;
+}
+
+export interface UpdateAddressDto {
+  street?: string;
+  number?: string;
+  complement?: string;
+  city?: string;
+  state?: string;
+  cep?: string;
+}
+
 export interface Rating {
   id: string;
-  rate: number;      
-  comment?: string;  
+  rate: number;
+  comment?: string;
   userId: string;
   productId: string;
-  user?: {           
+  user?: {
     name: string;
   };
   createdAt: string;

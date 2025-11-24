@@ -39,11 +39,8 @@ export default function CartPage() {
   }, 0);
 
   return (
-    // CORREÇÃO 1: 'flex-col' em vez de 'flex-co'
     <div className="flex flex-col min-h-screen">
       <Header />
-      
-      {/* CORREÇÃO 2: 'container mx-auto' separado por espaço */}
       <main className="flex-grow container mx-auto p-4 md:p-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Meu Carrinho</h1>
         <div className="flex flex-col lg:flex-row gap-8">

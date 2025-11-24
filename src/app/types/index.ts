@@ -30,3 +30,35 @@ export interface Order {
   totalAmount: number;
   items: OrderItem[];
 }
+
+export interface Address {
+  id: string;
+  userId: string;
+  street: string;
+  number: string;
+  complement?: string | null;
+  city: string;
+  state: string;
+  cep: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface CreateAddressDto {
+  userId: string;
+  street: string;
+  number: string;
+  complement?: string;
+  city: string;
+  state: string;
+  cep: string;
+}
+
+export interface UpdateAddressDto {
+  street?: string;
+  number?: string;
+  complement?: string;
+  city?: string;
+  state?: string;
+  cep?: string;
+}

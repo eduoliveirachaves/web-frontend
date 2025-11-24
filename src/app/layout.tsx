@@ -4,6 +4,7 @@ import './globals.css';
 import {CartProvider} from '@/app/context/CartContext';
 import {AuthProvider} from '@/app/context/AuthContext';
 import {WishlistProvider} from "@/app/context/WishlistContext";
+import { ToastProvider } from '@/app/context/ToastContext';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -26,14 +27,16 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR">
-		<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-		<AuthProvider>
-			<WishlistProvider>
-				<CartProvider>{children}</CartProvider>
-			</WishlistProvider>
-		</AuthProvider>
-		</body>
-		</html>
-	);
+    <html lang="pt-BR">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ToastProvider>
+          <AuthProvider>
+            <WishlistProvider>
+              <CartProvider>{children}</CartProvider>
+            </WishlistProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </body>
+    </html>
+  );
 }

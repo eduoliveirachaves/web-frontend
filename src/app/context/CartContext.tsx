@@ -4,6 +4,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Order, Product } from '@/app/types';
 import { cartService } from '@/app/services/cartService';
 import { useAuth } from './AuthContext';
+import { useToast } from '@/app/context/ToastContext';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface CartContextType {
   cart: Order | null;
@@ -21,6 +23,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const { user } = useAuth();
   const [cart, setCart] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToast();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const userId = user?.id;
 
@@ -37,7 +42,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     try {
       const orderData = await cartService.getOrder(orderId);
-      
+
       // Verification: if the loaded order is not IN_CART, we ignore it to avoid locking
       if (orderData.status !== 'IN_CART') {
         localStorage.removeItem('my_order_id');
@@ -57,7 +62,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = async (product: Product, quantity: number = 1) => {
     if (!userId) {
-      alert('Por favor, faça login para adicionar produtos ao carrinho.');
+      showToast({
+        message: 'Entre para adicionar produtos ao carrinho.',
+        variant: 'info',
+        action: {
+          label: 'Entrar',
+          onClick: () => router.push(`/login?next=${encodeURIComponent(pathname || '/')}`),
+        },
+      });
       return;
     }
 
@@ -79,19 +91,25 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       // 2. Try to add the item
       await cartService.addItem(currentOrderId, product.id, quantity);
-      
+
       // 3. Reload cart to show changes
       await loadCart(currentOrderId);
-      alert('Produto adicionado com sucesso!');
-
+      showToast({
+        message: 'Produto adicionado ao carrinho.',
+        variant: 'success',
+        action: { label: 'Ver carrinho', onClick: () => router.push('/cart') },
+      });
     } catch (error: any) {
       console.error('Erro ao adicionar:', error);
 
       // === AUTO-FIX FOR THE "IN_CART" ERROR ===
       // If the backend says the order is not IN_CART, we create a new one and retry.
-      if (error.message && (error.message.includes('IN_CART') || error.message.includes('status'))) {
+      if (
+        error.message &&
+        (error.message.includes('IN_CART') || error.message.includes('status'))
+      ) {
         console.warn('Pedido antigo finalizado detectado. Criando novo pedido...');
-        
+
         try {
           // Clear old ID
           localStorage.removeItem('my_order_id');
@@ -106,14 +124,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           // Retry adding the item to the new order
           await cartService.addItem(newOrderId, product.id, quantity);
           await loadCart(newOrderId);
-          alert('Produto adicionado com sucesso! (Novo carrinho criado)');
+          showToast({
+            message: 'Produto adicionado ao carrinho. Novo carrinho criado.',
+            variant: 'success',
+            action: { label: 'Ver carrinho', onClick: () => router.push('/cart') },
+          });
           return;
         } catch (retryError) {
           console.error('Falha ao recriar pedido:', retryError);
-          alert('Erro ao criar novo pedido. Tente recarregar a página.');
+          showToast({
+            message: 'Erro ao criar novo pedido. Tente recarregar a página.',
+            variant: 'error',
+          });
         }
       } else {
-        alert(`Erro: ${error.message}`);
+        showToast({
+          message: `Erro: ${error.message || 'Falha ao adicionar ao carrinho.'}`,
+          variant: 'error',
+        });
       }
     }
   };

@@ -30,9 +30,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product}) => {
 	const [selectedImage, setSelectedImage] = useState(0); // Estado para controle da galeria
 
 	const handleAddToCart = () => {
-		for (let i = 0; i < quantity; i++) {
-			addToCart(product);
-		}
+		addToCart(product, quantity);
 	};
 
 	const incrementQty = () => setQuantity(prev => prev + 1);

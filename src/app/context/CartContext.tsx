@@ -8,7 +8,7 @@ import { useAuth } from './AuthContext';
 interface CartContextType {
   cart: Order | null;
   isLoading: boolean;
-  addToCart: (product: Product) => Promise<void>;
+  addToCart: (product: Product, quantity?: number) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
 }
@@ -18,33 +18,36 @@ const CartContext = createContext<CartContextType>(null!);
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { user } = useAuth(); // Pega usuário real
+  const { user } = useAuth();
   const [cart, setCart] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Se tiver usuário logado, usa o ID dele.
   const userId = user?.id;
 
   useEffect(() => {
     const savedOrderId = localStorage.getItem('my_order_id');
-
-    // Só carrega se tivermos um usuário E um ID de pedido salvo
     if (savedOrderId && userId) {
       loadCart(savedOrderId);
     } else {
-      // Se o usuário deslogar, limpamos o estado do carrinho visualmente
       setCart(null);
     }
-  }, [userId]); // Recarrega quando o usuário muda (login/logout)
+  }, [userId]);
 
   const loadCart = async (orderId: string) => {
     setIsLoading(true);
     try {
       const orderData = await cartService.getOrder(orderId);
+      
+      // Verification: if the loaded order is not IN_CART, we ignore it to avoid locking
+      if (orderData.status !== 'IN_CART') {
+        localStorage.removeItem('my_order_id');
+        setCart(null);
+        return;
+      }
+
       setCart(orderData);
     } catch (error) {
       console.error('Erro ao carregar carrinho:', error);
-      // Se o pedido não for encontrado (ex: foi pago ou deletado), limpa o localStorage
       localStorage.removeItem('my_order_id');
       setCart(null);
     } finally {
@@ -52,7 +55,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const addToCart = async (product: Product) => {
+  const addToCart = async (product: Product, quantity: number = 1) => {
     if (!userId) {
       alert('Por favor, faça login para adicionar produtos ao carrinho.');
       return;
@@ -61,10 +64,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       let currentOrderId = cart?.id;
 
+      // 1. Ensure we have an Order ID
       if (!currentOrderId) {
-        // Tenta recuperar do localStorage primeiro caso o state esteja vazio mas o ID exista
         const storedId = localStorage.getItem('my_order_id');
-
         if (storedId) {
           currentOrderId = storedId;
         } else {
@@ -75,13 +77,44 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
       }
 
-      await cartService.addItem(currentOrderId, product.id, 1);
-
+      // 2. Try to add the item
+      await cartService.addItem(currentOrderId, product.id, quantity);
+      
+      // 3. Reload cart to show changes
       await loadCart(currentOrderId);
-      alert('Produto adicionado!');
-    } catch (error) {
+      alert('Produto adicionado com sucesso!');
+
+    } catch (error: any) {
       console.error('Erro ao adicionar:', error);
-      alert('Erro ao adicionar produto. Tente novamente.');
+
+      // === AUTO-FIX FOR THE "IN_CART" ERROR ===
+      // If the backend says the order is not IN_CART, we create a new one and retry.
+      if (error.message && (error.message.includes('IN_CART') || error.message.includes('status'))) {
+        console.warn('Pedido antigo finalizado detectado. Criando novo pedido...');
+        
+        try {
+          // Clear old ID
+          localStorage.removeItem('my_order_id');
+          setCart(null);
+
+          // Create new order
+          const newOrder = await cartService.createOrder(userId);
+          const newOrderId = newOrder.id;
+          localStorage.setItem('my_order_id', newOrderId);
+          setCart(newOrder);
+
+          // Retry adding the item to the new order
+          await cartService.addItem(newOrderId, product.id, quantity);
+          await loadCart(newOrderId);
+          alert('Produto adicionado com sucesso! (Novo carrinho criado)');
+          return;
+        } catch (retryError) {
+          console.error('Falha ao recriar pedido:', retryError);
+          alert('Erro ao criar novo pedido. Tente recarregar a página.');
+        }
+      } else {
+        alert(`Erro: ${error.message}`);
+      }
     }
   };
 

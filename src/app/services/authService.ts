@@ -37,15 +37,25 @@ export const authService = {
     return res.json();
   },
 
-  // Atualiza o perfil do usuário autenticado
-  async updateProfile(token: string, data: Partial<{ name: string; email: string; age: number }>) {
+  // Atualiza o perfil do usuário autenticado (usa PATCH /user/me conforme backend NestJS)
+  async updateProfile(
+    token: string,
+    data: Partial<{ name: string; email: string; age: number; password: string }>,
+  ) {
+    // Filtra apenas campos definidos para evitar enviar undefined
+    const payload: Record<string, any> = {};
+    ['name', 'email', 'age', 'password'].forEach((key) => {
+      const value = (data as any)[key];
+      if (value !== undefined && value !== '') payload[key] = value;
+    });
+
     const res = await fetch(`${API_URL}/user/me`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));

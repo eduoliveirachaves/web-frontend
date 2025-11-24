@@ -8,6 +8,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  age?: number; // opcional
 }
 
 interface AuthContextType {
@@ -17,7 +18,9 @@ interface AuthContextType {
   register: (data: any) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
-  updateProfile: (data: Partial<{ name: string; email: string; age: number }>) => Promise<void>;
+  updateProfile: (
+    data: Partial<{ name: string; email: string; age: number; password: string }>,
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
@@ -74,10 +77,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Atualiza o perfil no backend e sincroniza o estado local
-  const updateProfile = async (data: Partial<{ name: string; email: string; age: number }>) => {
+  const updateProfile = async (
+    data: Partial<{ name: string; email: string; age: number; password: string }>,
+  ) => {
     if (!token) throw new Error('Usuário não autenticado');
     const updated = await authService.updateProfile(token, data);
-    // Comentário: backend pode retornar o usuário atualizado; usamos isso para manter o estado consistente
     setUser((prev) => ({ ...(prev as User), ...updated }));
   };
 

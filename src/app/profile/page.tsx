@@ -15,7 +15,7 @@ export default function ProfilePage() {
     }
   }, [isLoading, user, router]);
 
-  const [form, setForm] = useState({ name: '', email: '', age: '' });
+  const [form, setForm] = useState({ name: '', email: '', age: '', password: '' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -26,7 +26,8 @@ export default function ProfilePage() {
       setForm({
         name: user.name || '',
         email: user.email || '',
-        age: '', // se seu backend devolver idade, substitua aqui
+        age: user.age ? String(user.age) : '', // Ajuste para refletir idade do backend
+        password: '',
       });
     }
   }, [user]);
@@ -47,6 +48,8 @@ export default function ProfilePage() {
     try {
       const payload: any = { name: form.name, email: form.email };
       if (form.age) payload.age = Number(form.age);
+      if (form.password) payload.password = form.password; // Incluindo senha no payload
+
       // Comentário: updateProfile chama o backend e sincroniza o estado de usuário no contexto
       await updateProfile(payload);
       setSuccess(true);
@@ -119,6 +122,21 @@ export default function ProfilePage() {
                 value={form.age}
                 onChange={onChange}
                 placeholder="Ex: 25"
+                className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Nova Senha (opcional)
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={onChange}
+                placeholder="Digite sua nova senha"
                 className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
               />
             </div>

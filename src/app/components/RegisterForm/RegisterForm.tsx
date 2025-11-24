@@ -65,11 +65,10 @@ const RegisterForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="register-name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Nome Completo
           </label>
           <input
-            id="register-name"
             name="name"
             type="text"
             value={formData.name}
@@ -81,11 +80,10 @@ const RegisterForm: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="register-email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             E-mail
           </label>
           <input
-            id="register-email"
             name="email"
             type="email"
             value={formData.email}
@@ -121,7 +119,6 @@ const RegisterForm: React.FC = () => {
             Senha (mín. 8 caracteres)
           </label>
           <input
-            id="register-password"
             name="password"
             type="password"
             minLength={8}
@@ -141,7 +138,6 @@ const RegisterForm: React.FC = () => {
             Confirmar Senha
           </label>
           <input
-            id="confirm-password"
             name="confirmPassword"
             type="password"
             minLength={8}

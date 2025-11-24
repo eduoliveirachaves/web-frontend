@@ -18,6 +18,36 @@ const LoginForm: React.FC = () => {
     router.push("/");
   };
 
+  async function handleLogin(e: React.FormEvent) {
+      e.preventDefault();
+
+      try {
+          const res = await fetch("http://localhost:3000/auth/login", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                  email,
+                  password
+              })
+          });
+
+          if (!res.ok) {
+              alert("Credenciais inválidas.");
+              return;
+          }
+
+          const data = await res.json();
+          localStorage.setItem("token", data.token);
+
+          window.location.href = "/"; // redireciona para home
+      } catch (error) {
+          alert("Erro ao tentar fazer login.");
+      }
+  }
+
+
   return (
     <div className="w-full max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Acessar Conta</h2>

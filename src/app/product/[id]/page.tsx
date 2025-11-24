@@ -3,6 +3,7 @@ import Header from '@/app/components/Header/Header';
 import Footer from '@/app/components/Footer/Footer';
 import ProductDetails from '@/app/components/ProductDetails/ProductDetails';
 import { Product } from '@/app/types';
+import ReviewsSection from '@/app/components/ReviewsSection/ReviewsSection';
 
 async function getProduct(id: string): Promise<Product | null> {
   try {
@@ -37,6 +38,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <main className="flex-grow container mx-auto p-4 md:p-8 mt-8">
         <ProductDetails product={product} />
+        <div className="mt-12">
+           <ReviewsSection productId={product.id} />
+        </div>
       </main>
 
       <Footer />

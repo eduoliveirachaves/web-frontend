@@ -8,6 +8,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  age?: number; // opcional
 }
 
 interface AuthContextType {
@@ -17,6 +18,9 @@ interface AuthContextType {
   register: (data: any) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  updateProfile: (
+    data: Partial<{ name: string; email: string; age: number; password: string }>,
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
@@ -27,20 +31,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-	// verifica se tem token no localStorage e se o token eh valido
-	useEffect(() => {
-		const storedToken = localStorage.getItem('auth_token');
-		if (storedToken) {
-			setToken(storedToken);
-			authService
-				.getMe(storedToken)
-				.then((userData: any) => setUser(userData))
-				.catch(() => logout())
-				.finally(() => setIsLoading(false));
-		} else {
-			setIsLoading(false);
-		}
-	}, []);
+  // verifica se tem token no localStorage e se o token eh valido
+  useEffect(() => {
+    const storedToken = localStorage.getItem('auth_token');
+    if (storedToken) {
+      setToken(storedToken);
+      authService
+        .getMe(storedToken)
+        .then((userData: any) => setUser(userData))
+        .catch(() => logout())
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   const login = async (email: string, pass: string) => {
     try {
@@ -72,8 +76,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push('/login');
   };
 
+  // Atualiza o perfil no backend e sincroniza o estado local
+  const updateProfile = async (
+    data: Partial<{ name: string; email: string; age: number; password: string }>,
+  ) => {
+    if (!token) throw new Error('Usuário não autenticado');
+    const updated = await authService.updateProfile(token, data);
+    setUser((prev) => ({ ...(prev as User), ...updated }));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, token, login, register, logout, isLoading, updateProfile }}
+    >
       {children}
     </AuthContext.Provider>
   );

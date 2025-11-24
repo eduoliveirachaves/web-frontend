@@ -25,20 +25,13 @@ const LoginForm: React.FC = () => {
 		}
 	}, [searchParams, router]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setError('');
-		setLoading(true);
-
-		try {
-			await login(email, password);
-		} catch (err) {
-			console.error(err);
-			setError('Falha no login. Verifique seu e-mail e senha.');
-		} finally {
-			setLoading(false);
-		}
-	};
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulação da lógica de login
+    console.log('Tentativa de Login:', { email, password });
+    alert('Login simulado! Verifique o console.');
+    router.push("/");
+  };
 
 	return (
 		<div className="w-full max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-sm">

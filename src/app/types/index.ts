@@ -62,3 +62,15 @@ export interface UpdateAddressDto {
   state?: string;
   cep?: string;
 }
+
+export interface Rating {
+  id: string;
+  rate: number;
+  comment?: string;
+  userId: string;
+  productId: string;
+  user?: {
+    name: string;
+  };
+  createdAt: string;
+}

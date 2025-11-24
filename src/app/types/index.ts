@@ -30,3 +30,15 @@ export interface Order {
   totalAmount: number;
   items: OrderItem[];
 }
+
+export interface Rating {
+  id: string;
+  rate: number;      
+  comment?: string;  
+  userId: string;
+  productId: string;
+  user?: {           
+    name: string;
+  };
+  createdAt: string;
+}

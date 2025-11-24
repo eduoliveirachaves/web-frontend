@@ -3,11 +3,16 @@
 import React from 'react';
 import Link from 'next/link';
 import SearchBar from '../SearchBar/SearchBar';
+import { useCart } from '@/app/context/CartContext';
 
 const Header: React.FC = () => {
   const handleSearch = (query: string) => {
     console.log('Buscando por:', query);
   };
+
+  const { cart } =  useCart();
+
+  const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   return (
     <header className="w-full bg-white shadow-md p-4">
@@ -26,6 +31,11 @@ const Header: React.FC = () => {
           </Link>
           <Link href="/cart" className="text-gray-600 hover:text-gray-900">
             Carrinho
+            {totalItems > 0 && (
+              <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </Link>
           <Link href="/login" className="text-gray-600 hover:text-gray-900">
             Login

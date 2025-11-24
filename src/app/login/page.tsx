@@ -1,43 +1,32 @@
-"use client"; // obrigatório se estiver usando hooks
-
-import { useState } from "react";
+import Image from "next/image";
+import LoginForm from "../components/LoginForm/LoginForm";
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log("Login:", email, senha);
-    };
+      <div className="w-full max-w-lg bg-white shadow-md rounded-2xl p-10 border border-gray-100">
 
-    return (
-        <main style={{ padding: "2rem", textAlign: "center" }}>
-            <h1>Login</h1>
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                    width: "200px",
-                    margin: "auto",
-                }}
-            >
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Senha"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                />
-                <button type="submit">Entrar</button>
-            </form>
-        </main>
-    );
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/cart-1-svgrepo-com.svg"
+            alt="Ícone"
+            width={60}
+            height={60}
+            className="opacity-90"
+          />
+        </div>
+
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Bem-vindo de volta
+        </h1>
+
+        <p className="text-gray-600 text-center mt-2 mb-8">
+          Acesse sua conta usando seu e-mail e senha.
+        </p>
+
+        <LoginForm />
+      </div>
+    </main>
+  );
 }

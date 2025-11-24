@@ -31,7 +31,6 @@ export const cartService = {
     });
 
     if (!res.ok) {
-        // AQUI: Pega a mensagem real do backend (ex: "Estoque insuficiente")
         const errorData = await res.json().catch(() => ({}));
         console.error('Erro detalhado do backend:', errorData);
         throw new Error(errorData.message || `Erro ${res.status}: Falha ao adicionar item`);
@@ -56,4 +55,14 @@ export const cartService = {
     });
     if (!res.ok) throw new Error('Erro ao remover item');
   },
+
+  async getMyOrders(userId: string, token: string) {
+    const res = await fetch(`${API_URL}/order/user/${userId}`, { 
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  },
 };
+

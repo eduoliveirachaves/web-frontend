@@ -13,6 +13,7 @@ interface CartContextType {
   addToCart: (product: Product, quantity?: number) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
+  clearLocalCart: () => void;
 }
 
 const CartContext = createContext<CartContextType>(null!);
@@ -36,7 +37,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } else {
       setCart(null);
     }
-  }, [userId]);
+  }, [user]);
 
   const loadCart = async (orderId: string) => {
     setIsLoading(true);
@@ -158,8 +159,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     await loadCart(cart.id);
   };
 
+  const clearLocalCart = () => {
+    localStorage.removeItem('my_order_id');
+    setCart(null);
+  };
+
   return (
-    <CartContext.Provider value={{ cart, isLoading, addToCart, updateQuantity, removeItem }}>
+    <CartContext.Provider value={{ cart, isLoading, addToCart, updateQuantity, removeItem, clearLocalCart }}>
       {children}
     </CartContext.Provider>
   );

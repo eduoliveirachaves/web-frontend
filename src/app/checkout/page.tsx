@@ -1,40 +1,87 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Para redirecionar após a compra
 import Header from '@/app/components/Header/Header';
 import Footer from '@/app/components/Footer/Footer';
 import { useCart } from '@/app/context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function CheckoutPage() {
-  const { cart, isLoading } = useCart();
+  const { cart, isLoading, clearLocalCart } = useCart();
   const router = useRouter();
 
   // Estado simples para o formulário
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    address: '',
+    cep: '',
+    street: '',
+    number: '',
+    neighborhood: '',
     city: '',
+    state: '',
     paymentMethod: 'credit_card',
   });
+
+  const [cepLoading, setCepLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFinishOrder = (e: React.FormEvent) => {
+  const handleBlurCep = async () => {
+    const cep = formData.cep.replace(/\D/g, '');
+
+    if (cep.length === 8) {
+      setCepLoading(true);
+      try {
+        const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await res.json();
+
+        if (!data.erro) {
+          setFormData((prev) => ({
+            ...prev,
+            street: data.logradouro,
+            neighborhood: data.bairro,
+            city: data.localidade,
+            state: data.uf,
+          }));
+          document.getElementById('number-input')?.focus();
+        } else {
+          alert('CEP não encontrado.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+      } finally {
+        setCepLoading(false);
+      }
+    }
+  };
+
+  const handleFinishOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui entraria a lógica real de enviar para o backend
-    console.log('Dados do Pedido:', { user: formData, items: cart?.items });
+    
+    if (!cart?.id) return; // Segurança: garante que temos um ID de carrinho
 
-    alert('Pedido realizado com sucesso! Obrigado pela compra.');
+    try {
 
-    // Opcional: Limpar carrinho aqui (seria uma função clearCart() no contexto)
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/${cart.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'PAID' }) 
+    });
 
-    router.push('/'); // Volta para a home
+    clearLocalCart();
+
+    router.push('/checkout/success'); 
+
+    } catch (error) {
+      console.error("Erro ao finalizar pedido:", error);
+      alert("Houve um problema ao finalizar o pedido. Tente novamente.");
+    }
   };
 
   if (isLoading) {
@@ -112,15 +159,20 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">CEP</label>
+                  <div className='relative'>
                   <input
-                    name="address"
+                    name="cep"
                     required
-                    value={formData.address}
+                    value={formData.cep}
                     onChange={handleChange}
+                    onBlur={handleBlurCep}
                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="Rua, número, bairro"
+                    placeholder="00000-00"
+                    maxLength={9}
                   />
+                  {cepLoading && <span className="absolute right-3 top-2 text-xs text-blue-600">Buscando...</span>}
+                </div>
                 </div>
 
                 <div>
@@ -131,7 +183,42 @@ export default function CheckoutPage() {
                     value={formData.city}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    placeholder="Ex: São Paulo"
+                    readOnly
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Endereço (Rua)</label>
+                  <input 
+                  name="street" 
+                  value={formData.street} 
+                  onChange={handleChange} 
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-50" 
+                  readOnly 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                  <input 
+                  id="number-input"
+                  name="number" 
+                  required 
+                  value={formData.number} 
+                  onChange={handleChange} 
+                  className="w-full px-4 py-2 border rounded-lg" 
+                  placeholder="123" 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                  <input 
+                  name="neighborhood" 
+                  value={formData.neighborhood} 
+                  onChange={handleChange} 
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-50" 
+                  readOnly 
                   />
                 </div>
               </form>

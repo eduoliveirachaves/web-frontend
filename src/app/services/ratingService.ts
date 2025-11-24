@@ -1,6 +1,6 @@
-import { Rating } from "../types";
+import { Rating } from '../types';
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://web-backend-sck9.onrender.com';
 
 export const ratingService = {
   async getRatingsByProduct(productId: string): Promise<Rating[]> {
@@ -11,19 +11,25 @@ export const ratingService = {
     return res.json();
   },
 
-async createRating(productId: string, userId: string, rate: number, comment: string, token: string) {
+  async createRating(
+    productId: string,
+    userId: string,
+    rate: number,
+    comment: string,
+    token: string,
+  ) {
     const res = await fetch(`${API_URL}/ratings`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ productId, userId, rate, comment }),
     });
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error(error.message || "Erro ao enviar avaliação");
+      throw new Error(error.message || 'Erro ao enviar avaliação');
     }
     return res.json();
   },

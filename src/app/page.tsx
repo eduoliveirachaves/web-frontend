@@ -7,7 +7,7 @@ import { Product } from './types';
 // Função para buscar produtos do backend
 async function getProducts(): Promise<Product[]> {
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://web-backend-sck9.onrender.com';
 
     if (!backendUrl) {
       console.error('BACKEND_URL is not defined');

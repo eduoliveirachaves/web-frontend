@@ -1,6 +1,6 @@
 import { Product } from '@/app/types/';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://web-backend-sck9.onrender.com';
 
 // Normaliza respostas de wishlist vindas do backend para um array de Product
 function normalizeWishlistPayload(payload: any): Product[] {

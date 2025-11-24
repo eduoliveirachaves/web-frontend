@@ -4,6 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { wishlistService } from '@/app/services/wishlistService';
 import { Product } from '@/app/types/';
+import { useToast } from '@/app/context/ToastContext';
+import { useRouter } from 'next/navigation';
 
 interface WishlistContextType {
   items: Product[];
@@ -17,6 +19,8 @@ const WishlistContext = createContext<WishlistContextType>(null!);
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
   const { token, user } = useAuth();
   const [items, setItems] = useState<Product[]>([]);
+  const { showToast } = useToast();
+  const router = useRouter();
 
   // Carrega wishlist quando user loga
   useEffect(() => {
@@ -32,7 +36,14 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
 
   const addToWishlist = async (product: Product) => {
     if (!token) {
-      alert('Você precisa estar logado para salvar itens!');
+      showToast({
+        message: 'Entre para salvar itens nos seus favoritos.',
+        variant: 'info',
+        action: {
+          label: 'Entrar',
+          onClick: () => router.push('/login?next=/wishlist'),
+        },
+      });
       return;
     }
     // evita duplicatas

@@ -36,4 +36,21 @@ export const authService = {
     if (!res.ok) return null;
     return res.json();
   },
+
+  // Atualiza o perfil do usuário autenticado
+  async updateProfile(token: string, data: Partial<{ name: string; email: string; age: number }>) {
+    const res = await fetch(`${API_URL}/user/me`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message || 'Falha ao atualizar perfil');
+    }
+    return res.json();
+  },
 };

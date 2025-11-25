@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type {Product} from '@/app/types';
@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import {useCart} from '@/app/context/CartContext';
 import { useWishlist } from '@/app/context/WishlistContext';
+import { ratingService } from '@/app/services/ratingService';
 
 interface ProductDetailsProps {
   product: Product;
@@ -33,6 +34,32 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   const [wishLoading, setWishLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0); // Estado para controle da galeria
+  
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [loadingRatings, setLoadingRatings] = useState(true);
+
+  useEffect(() => {
+    const loadRatings = async () => {
+      try {
+        const ratings = await ratingService.getRatingsByProduct(product.id);
+        setTotalReviews(ratings.length);
+        
+        if (ratings.length > 0) {
+          const sum = ratings.reduce((acc, rating) => acc + rating.rate, 0);
+          setAverageRating(sum / ratings.length);
+        } else {
+          setAverageRating(0);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar avaliações:', error);
+      } finally {
+        setLoadingRatings(false);
+      }
+    };
+
+    loadRatings();
+  }, [product.id]);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -139,14 +166,22 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
                 <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider rounded-full">
                   Novo Lançamento
                 </span>
-                <div className="flex items-center text-yellow-400 text-sm">
-                  <Star fill="currentColor" size={16} />
-                  <span className="ml-1 text-slate-700 font-medium">4.8</span>
-                  <span className="text-slate-400 mx-1">•</span>
-                  <span className="text-slate-500 underline cursor-pointer hover:text-blue-600">
-                    128 avaliações
-                  </span>
-                </div>
+                {loadingRatings ? (
+                  <span className="text-slate-400 text-sm">Carregando avaliações...</span>
+                ) : totalReviews > 0 ? (
+                  <div className="flex items-center text-yellow-400 text-sm">
+                    <Star fill="currentColor" size={16} />
+                    <span className="ml-1 text-slate-700 font-medium">
+                      {averageRating.toFixed(1)}
+                    </span>
+                    <span className="text-slate-400 mx-1">•</span>
+                    <span className="text-slate-500 underline cursor-pointer hover:text-blue-600">
+                      {totalReviews} {totalReviews === 1 ? 'avaliação' : 'avaliações'}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-slate-400 text-sm">Sem avaliações ainda</span>
+                )}
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">

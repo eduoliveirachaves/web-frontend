@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingCart, Heart, Star } from 'lucide-react';
 import type { Product } from '@/app/types';
 import { useCart } from '@/app/context/CartContext';
 import { useWishlist } from '@/app/context/WishlistContext';
+import { ratingService } from '@/app/services/ratingService';
 
 interface ProductCardProps {
   product: Product;
@@ -16,8 +17,29 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const inWishlist = isInWishlist(product.id);
-  const [wishLoading, setWishLoading] = React.useState(false);
+  const [wishLoading, setWishLoading] = useState(false);
   const price = Number(product.price);
+  
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+
+  useEffect(() => {
+    const loadRatings = async () => {
+      try {
+        const ratings = await ratingService.getRatingsByProduct(product.id);
+        setTotalReviews(ratings.length);
+        
+        if (ratings.length > 0) {
+          const sum = ratings.reduce((acc, rating) => acc + rating.rate, 0);
+          setAverageRating(sum / ratings.length);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar avaliações:', error);
+      }
+    };
+
+    loadRatings();
+  }, [product.id]);
 
   // Este handler é chamado ao clicar no botão de carrinho
   // dentro do card que está envolto por um <Link>.
@@ -93,6 +115,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <h3 className="text-slate-800 font-medium text-base leading-snug mb-2 line-clamp-2 grow group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
+
+        {totalReviews > 0 && (
+          <div className="flex items-center gap-1 text-xs text-slate-500 mb-2">
+            <Star size={14} fill="currentColor" className="text-yellow-400" />
+            <span className="font-medium text-slate-700">{averageRating.toFixed(1)}</span>
+            <span className="text-slate-400">({totalReviews})</span>
+          </div>
+        )}
 
         {/* PRECO */}
         <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">

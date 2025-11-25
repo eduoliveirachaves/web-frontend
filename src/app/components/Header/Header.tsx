@@ -8,10 +8,14 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useWishlist } from '@/app/context/WishlistContext';
 import { Heart } from 'lucide-react';
 import UserMenu from '../UserMenu/UserMenu';
+import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
+  const router = useRouter();
   const handleSearch = (query: string) => {
-    console.log('Buscando por:', query);
+    if (query.trim()){
+      router.push(`/search?q=${encodeURIComponent(query)}`);
+    }
   };
 
   const { cart } = useCart();

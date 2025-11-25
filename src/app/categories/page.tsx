@@ -6,6 +6,8 @@ import CategorySidebar from '@/app/components/CategorySidebar/CategorySidebar';
 import ProductList from '@/app/components/ProductList/ProductList';
 import { categoryService } from '@/app/services/categoryService';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CategoriesPage() {
   const categories = await categoryService.getCategories();
 

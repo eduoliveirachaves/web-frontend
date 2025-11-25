@@ -7,6 +7,8 @@ import { categoryService } from './services/categoryService';
 import CategoryCard from './components/Category/Category'; // Assuming this is the path, wait, I need to check the export
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   // Busca os dados reais
   const products = await productService.getProducts();

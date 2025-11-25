@@ -5,8 +5,10 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Header from '@/app/components/Header/Header';
 import Footer from '@/app/components/Footer/Footer';
+import AccountSidebar from '@/app/components/AccountSidebar/AccountSidebar';
 import { addressService } from '@/app/services/addressService';
 import { Address, CreateAddressDto, UpdateAddressDto } from '@/app/types';
+import { MapPin } from 'lucide-react';
 
 export default function EnderecosPage() {
   const { user, token, isLoading } = useAuth();
@@ -130,70 +132,78 @@ export default function EnderecosPage() {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
       <main className="flex-grow container mx-auto p-4 md:p-8">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <span className="text-blue-600">📍</span> ENDEREÇOS
-            </h1>
-            <button
-              onClick={() => handleOpenModal()}
-              className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg font-semibold transition flex items-center gap-2"
-            >
-              <span className="text-xl">+</span> CADASTRAR NOVO ENDEREÇO
-            </button>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <AccountSidebar />
+
+          <div className="flex-1">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <MapPin className="text-blue-600" size={28} /> Endereços
+              </h1>
+              <p className="text-gray-600">Gerencie seus endereços de entrega</p>
+            </div>
+
+            <div className="mb-4">
+              <button
+                onClick={() => handleOpenModal()}
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg font-semibold transition flex items-center gap-2"
+              >
+                <span className="text-xl">+</span> CADASTRAR NOVO ENDEREÇO
+              </button>
+            </div>
+
+            {addresses.length === 0 ? (
+              <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+                <p className="text-gray-500 text-lg mb-4">Nenhum endereço cadastrado.</p>
+                <button
+                  onClick={() => handleOpenModal()}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+                >
+                  Cadastrar Primeiro Endereço
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {addresses.map((address) => (
+                  <div
+                    key={address.id}
+                    className="bg-white rounded-lg shadow-md border border-gray-200 p-6"
+                  >
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">ENDEREÇO</h3>
+                      <div className="space-y-1 text-gray-700">
+                        <p>{address.street}</p>
+                        <p>
+                          Número {address.number}
+                          {address.complement ? `, ${address.complement}` : ''}
+                        </p>
+                        <p>{address.city}</p>
+                        <p>
+                          CEP {address.cep} - {address.state}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 text-sm font-semibold">
+                      <button
+                        onClick={() => handleDelete(address.id)}
+                        className="text-red-600 hover:text-red-700 underline"
+                      >
+                        EXCLUIR
+                      </button>
+                      <button
+                        onClick={() => handleOpenModal(address)}
+                        className="text-blue-600 hover:text-blue-700 underline"
+                      >
+                        EDITAR
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-
-        {addresses.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <p className="text-gray-500 text-lg mb-4">Nenhum endereço cadastrado.</p>
-            <button
-              onClick={() => handleOpenModal()}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-            >
-              Cadastrar Primeiro Endereço
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {addresses.map((address) => (
-              <div
-                key={address.id}
-                className="bg-white rounded-lg shadow-md border border-gray-200 p-6"
-              >
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">ENDEREÇO</h3>
-                  <div className="space-y-1 text-gray-700">
-                    <p>{address.street}</p>
-                    <p>
-                      Número {address.number}
-                      {address.complement ? `, ${address.complement}` : ''}
-                    </p>
-                    <p>{address.city}</p>
-                    <p>
-                      CEP {address.cep} - {address.state}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 text-sm font-semibold">
-                  <button
-                    onClick={() => handleDelete(address.id)}
-                    className="text-red-600 hover:text-red-700 underline"
-                  >
-                    EXCLUIR
-                  </button>
-                  <button
-                    onClick={() => handleOpenModal(address)}
-                    className="text-blue-600 hover:text-blue-700 underline"
-                  >
-                    EDITAR
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </main>
 
       {/* Modal */}

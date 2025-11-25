@@ -1,6 +1,6 @@
 import { Product } from '../types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://web-backend-sck9.onrender.com';
 
 export const productService = {
   async searchProducts(query: string = ''): Promise<Product[]> {

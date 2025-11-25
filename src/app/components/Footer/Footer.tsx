@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
 					<div className="space-y-4">
 						<h2 className="text-2xl font-bold text-white">🛒 MVP Market</h2>
 						<p className="text-sm leading-relaxed text-slate-400">
-							Fazer uma desc legal.
+							Nascemos da paixão pelo esporte e pela tecnologia. Nossa missão é entregar produtos e confiança que você precisa para vencer. 
 						</p>
 					</div>
 

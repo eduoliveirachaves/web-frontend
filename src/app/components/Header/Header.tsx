@@ -30,25 +30,25 @@ const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4 md:gap-8">
+      <div className="container mx-auto px-4 h-16 relative flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="text-xl md:text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-md"
+          className="text-xl md:text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors whitespace-nowrap z-20"
         >
           🛒 MVP Market
         </Link>
 
         {/* Search Bar - no mobile nao */}
-        <div className="flex-1 max-w-xl hidden md:block">
+        <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xl px-4 z-10">
           <SearchBar onSearch={handleSearch} placeholder="O que você procura hoje?" />
         </div>
 
         {/* Navegacao */}
-        <nav className="flex items-center gap-3 md:gap-5">
+        <nav className="flex items-center gap-3 md:gap-6 z-20 bg-white/0">
           <Link
             href="/categories"
-            className="hidden md:block text-gray-600 font-medium hover:text-blue-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-md px-1.5 py-0.5"
+            className="hidden md:block text-gray-600 font-medium hover:text-blue-600 transition-colors"
           >
             Categorias
           </Link>
@@ -70,25 +70,25 @@ const Header: React.FC = () => {
           {/* Cart Link */}
           <Link
             href="/cart"
-            className="group relative flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors px-2 py-1 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            className="group relative flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
             aria-label={cartLabel}
             title="Carrinho"
           >
             <span className="hidden md:inline font-medium">Carrinho</span>
             <span className="md:hidden">🛒</span> {/* Fallback icon for mobile */}
             {totalItems > 0 && (
-              <span className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 bg-blue-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center ring-2 ring-white">
+              <span className="absolute -top-2 -right-3 bg-blue-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center ring-2 ring-white">
                 {totalItems}
               </span>
             )}
           </Link>
 
           {/* ===User autenticado ou nao === */}
-          <div className="border-l pl-3 md:pl-5 border-gray-200">
+          <div className="border-l pl-4 md:pl-6 border-gray-200">
             {user ? (
               <UserMenu />
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <Link
                   href="/login"
                   className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"

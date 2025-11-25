@@ -87,7 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* === DETALHES === */}
       <div className="p-5 flex flex-col grow">
         <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-2">
-          Esportes
+          {product.categoryName || 'Geral'}
         </span>
 
         <h3 className="text-slate-800 font-medium text-base leading-snug mb-2 line-clamp-2 grow group-hover:text-blue-600 transition-colors">

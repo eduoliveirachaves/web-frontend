@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { Minus, Plus, Trash2, Package } from 'lucide-react';
 
 interface CartItemProps {
   item: {
@@ -24,54 +25,96 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove })
     if (item.quantity > 1) {
       onUpdateQuantity(item.id, item.quantity - 1);
     } else {
+      // Optional: confirm before removing on quantity 0/1
+      // For better UX, maybe just don't go below 1 here and let the remove button handle deletion
+      // or keep the confirm behavior.
       const confirmDelete = window.confirm('Deseja remover este item?');
       if (confirmDelete) onRemove(item.id);
     }
   };
 
   return (
-    <div className="flex items-center gap-4 p-4 border-b border-gray-200 bg-white rounded-lg shadow-sm mb-4">
-      <div className="relative w-20 h-20 flex-shrink-0">
-        <Image
-          src={item.imageUrl || '/window.svg'}
-          alt={item.name}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-md border"
-        />
+    <div className="p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-center bg-white group">
+      {/* Image */}
+      <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
+        {item.imageUrl ? (
+          <Image
+            src={item.imageUrl}
+            alt={item.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
+            <Package size={32} />
+          </div>
+        )}
       </div>
 
-      <div className="flex-grow">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">{item.name}</h3>
-        <p className="text-gray-500 text-sm">Valor un.: R$ {item.price.toFixed(2)}</p>
-      </div>
-
-      <div className="flex flex-col items-end gap-2">
-        <div className="flex items-center border rounded-lg overflow-hidden">
-          <button
-            onClick={handleDecrease}
-            className="px-3 py-1 bg-gray-50 hover:bg-gray-200 text-gray-600 transition"
-            disabled={false}
-          >
-            -
-          </button>
-          <span className="w-10 text-center font-medium text-gray-800">{item.quantity}</span>
-          <button
-            onClick={handleIncrease}
-            className="px-3 py-1 bg-gray-50 hover:bg-gray-200 text-gray-600 transition"
-          >
-            +
-          </button>
+      {/* Content */}
+      <div className="flex-grow flex flex-col justify-between min-h-[6rem]">
+        <div className="flex justify-between items-start gap-4">
+          <div>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2 mb-1">
+              {item.name}
+            </h3>
+            <p className="text-sm text-gray-500">
+              Valor unitário:{' '}
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                item.price,
+              )}
+            </p>
+          </div>
+          <div className="text-right sm:hidden">
+            <p className="font-bold text-blue-600 text-lg">
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                item.price * item.quantity,
+              )}
+            </p>
+          </div>
         </div>
 
-        <div className="text-right">
-          <p className="font-bold text-blue-600">R$ {(item.price * item.quantity).toFixed(2)}</p>
-          <button
-            onClick={() => onRemove(item.id)}
-            className="text-xs text-red-500 hover:text-red-700 underline mt-1"
-          >
-            Remover
-          </button>
+        <div className="flex items-center justify-between mt-4 sm:mt-0">
+          {/* Quantity Control */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+              <button
+                onClick={handleDecrease}
+                className="p-2 hover:bg-gray-200 text-gray-600 transition-colors disabled:opacity-50"
+                aria-label="Diminuir quantidade"
+              >
+                <Minus size={16} />
+              </button>
+              <span className="w-10 text-center font-medium text-gray-900 text-sm">
+                {item.quantity}
+              </span>
+              <button
+                onClick={handleIncrease}
+                className="p-2 hover:bg-gray-200 text-gray-600 transition-colors"
+                aria-label="Aumentar quantidade"
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+
+            <button
+              onClick={() => onRemove(item.id)}
+              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all ml-2"
+              title="Remover item"
+            >
+              <Trash2 size={18} />
+            </button>
+          </div>
+
+          {/* Total Price (Desktop) */}
+          <div className="hidden sm:block text-right">
+            <p className="text-xs text-gray-500 mb-1">Total</p>
+            <p className="font-bold text-blue-600 text-xl">
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+                item.price * item.quantity,
+              )}
+            </p>
+          </div>
         </div>
       </div>
     </div>

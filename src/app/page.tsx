@@ -2,35 +2,11 @@ import Header from './components/Header/Header';
 import HeroBanner from './components/HeroBanner/HeroBanner';
 import ProductList from './components/ProductList/ProductList';
 import Footer from './components/Footer/Footer';
-import { Product } from './types';
-
-// Função para buscar produtos do backend
-async function getProducts(): Promise<Product[]> {
-  try {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://web-backend-sck9.onrender.com';
-
-    if (!backendUrl) {
-      console.error('BACKEND_URL is not defined');
-      return [];
-    }
-
-    const res = await fetch(`${backendUrl}/products`, {
-      next: { revalidate: 60 }, // Atualiza a cada 60 segundos os produtos
-    });
-
-    if (!res.ok) return [];
-
-    // O backend retorna "ProductDto", precisamos garantir que bata com a interface "Product"
-    return res.json();
-  } catch (error) {
-    console.error('Erro ao buscar produtos:', error);
-    return [];
-  }
-}
+import { productService } from './services/productService';
 
 export default async function Home() {
   // Busca os dados reais
-  const products = await getProducts();
+  const products = await productService.getProducts();
 
   return (
     <div className="flex flex-col min-h-screen">

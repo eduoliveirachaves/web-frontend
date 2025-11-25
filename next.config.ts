@@ -13,7 +13,13 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.mos.cms.futurecdn.net',
         port: '',
-        pathname: '/**', // Novo domínio adicionado para corrigir o erro
+        pathname: '/**', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'fgohsyfbapfnhrtuybmb.supabase.co',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

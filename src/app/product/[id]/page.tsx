@@ -2,23 +2,8 @@ import { notFound } from 'next/navigation';
 import Header from '@/app/components/Header/Header';
 import Footer from '@/app/components/Footer/Footer';
 import ProductDetails from '@/app/components/ProductDetails/ProductDetails';
-import { Product } from '@/app/types';
 import ReviewsSection from '@/app/components/ReviewsSection/ReviewsSection';
-
-async function getProduct(id: string): Promise<Product | null> {
-  try {
-    const res = await fetch(`https://web-backend-sck9.onrender.com/products/${id}`, {
-      cache: 'no-store',
-    });
-
-    if (!res.ok) return null;
-
-    return res.json();
-  } catch (error) {
-    console.error('Erro ao buscar produto:', error);
-    return null;
-  }
-}
+import { productService } from '@/app/services/productService';
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -26,7 +11,7 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = await getProduct(id);
+  const product = await productService.getProductById(id);
 
   if (!product) {
     return notFound();
@@ -39,7 +24,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <main className="flex-grow container mx-auto p-4 md:p-8 mt-8">
         <ProductDetails product={product} />
         <div className="mt-12">
-           <ReviewsSection productId={product.id} />
+          <ReviewsSection productId={product.id} />
         </div>
       </main>
 

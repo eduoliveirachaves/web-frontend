@@ -24,7 +24,7 @@ O front-end deste projeto foi construído com as seguintes tecnologias:
 
 ## 📂 Estrutura do Projeto
 
-bash
+```bash
 src/
   app/
     page.tsx
@@ -37,7 +37,7 @@ src/
     SearchBar.module.css
 public/
   images/
-
+```
 ## 👨‍💻 Equipe / Autoria
 
 - Eduardo Chaves

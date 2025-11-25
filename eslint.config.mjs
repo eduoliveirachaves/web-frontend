@@ -10,19 +10,37 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  // ...compat.extends("next/core-web-vitals", "next/typescript"),
-  // Temporarily disabling the full next/core-web-vitals extension due to circular dependency issues in build
-  // We will manually add essential rules if needed, or wait for a fix in the upstream package.
-  // For now, we keep the ignores and basic setup to allow the build to proceed.
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
-      'no-console': 'warn',
-      // "@next/next/no-img-element": "warn",
+      "no-console": "warn",
+
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+
+      "@typescript-eslint/no-explicit-any": "off",
+
+      "react/no-unescaped-entities": "off",
+
+      "@next/next/no-img-element": "warn",
+
+      "@typescript-eslint/no-empty-interface": "off",
     },
   },
   {
-    ignores: ['node_modules/**', '.next/**', 'out/**', 'build/**', 'next-env.d.ts'],
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+    ],
   },
 ];
 

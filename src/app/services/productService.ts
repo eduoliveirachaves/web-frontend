@@ -4,10 +4,17 @@ import { categoryService } from './categoryService';
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://web-backend-sck9.onrender.com';
 
 export const productService = {
-  async getProducts(): Promise<Product[]> {
+  async getProducts(limit?: number, offset?: number): Promise<Product[]> {
     try {
+      const params = new URLSearchParams();
+      if (limit !== undefined) params.append('limit', limit.toString());
+      if (offset !== undefined) params.append('offset', offset.toString());
+      
+      const queryString = params.toString();
+      const url = `${API_URL}/products${queryString ? `?${queryString}` : ''}`;
+
       const [res, categories] = await Promise.all([
-        fetch(`${API_URL}/products`, {
+        fetch(url, {
           cache: 'no-store',
         }),
         categoryService.getCategories(),

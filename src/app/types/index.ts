@@ -4,6 +4,8 @@ export interface Product {
   price: number;
   imageUrl: string;
   description?: string;
+  categoryId?: string;
+  categoryName?: string;
 }
 
 export interface CartItem extends Product {
@@ -29,6 +31,8 @@ export interface Order {
   status: 'IN_CART' | 'PENDING' | 'PAID' | 'SHIPPED' | 'DELIVERED' | 'CANCELED';
   totalAmount: number;
   items: OrderItem[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Address {

@@ -12,6 +12,32 @@ O front-end deste projeto foi construído com as seguintes tecnologias:
 - **[Tailwind CSS](https://tailwindcss.com/)**: Framework CSS "utility-first" para estilização rápida. (Importado em `src/app/globals.css` e usado em componentes como `Header.tsx` e `ProductCard.tsx`).
 - **CSS Modules**: Para estilos componentizados e escopados. (Utilizado no `SearchBar.module.css`).
 
+## 🧩 Funcionalidades Implementadas
+
+- Listagem de produtos
+- Página de detalhes
+- Barra de busca
+- Carrinho de compras
+- Perfil de Usuario
+- Login e Cadastro
+- Pagina de Compra
+
+## 📂 Estrutura do Projeto
+
+```bash
+src/
+  app/
+    page.tsx
+    layout.tsx
+    globals.css
+  components/
+    Header.tsx
+    ProductCard.tsx
+    SearchBar.tsx
+    SearchBar.module.css
+public/
+  images/
+```
 ## 👨‍💻 Equipe / Autoria
 
 - Eduardo Chaves

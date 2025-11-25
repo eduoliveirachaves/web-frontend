@@ -31,21 +31,34 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const userId = user?.id;
 
   useEffect(() => {
+    if (!userId) {
+      // Se não tem usuário logado, limpa o carrinho
+      localStorage.removeItem('my_order_id');
+      setCart(null);
+      return;
+    }
+
     const savedOrderId = localStorage.getItem('my_order_id');
-    if (savedOrderId && userId) {
+    if (savedOrderId) {
       loadCart(savedOrderId);
     } else {
       setCart(null);
     }
-  }, [user]);
+  }, [userId]);
 
   const loadCart = async (orderId: string) => {
+    if (!userId) {
+      localStorage.removeItem('my_order_id');
+      setCart(null);
+      return;
+    }
+
     setIsLoading(true);
     try {
       const orderData = await cartService.getOrder(orderId);
 
-      // Verification: if the loaded order is not IN_CART, we ignore it to avoid locking
-      if (orderData.status !== 'IN_CART') {
+
+      if (orderData.status !== 'IN_CART' || orderData.userId !== userId) {
         localStorage.removeItem('my_order_id');
         setCart(null);
         return;

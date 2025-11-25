@@ -1,99 +1,67 @@
+'use client';
 import React from 'react';
 import Link from 'next/link';
-import {ArrowRight, TrendingUp, ShieldCheck, Zap} from 'lucide-react';
+import { useAuth } from '@/app/context/AuthContext';
+import { ArrowRight } from 'lucide-react';
 
 const HeroBanner: React.FC = () => {
-	return (
-		<div className="w-full bg-white pb-8">
-			<div className="container mx-auto px-4 pt-6">
-
-				{/* Main Banner Card */}
-				<div
-					className="relative w-full bg-gradient-to-r from-blue-700 to-blue-600 rounded-3xl overflow-hidden shadow-xl min-h-[400px] flex items-center">
-
-					{/* Background */}
-					<div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
-						<svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-							<path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"/>
-						</svg>
-					</div>
-
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full p-8 md:p-16 relative z-10">
-
-						{/* Todos os conteudos da esquerda */}
-						<div className="flex flex-col justify-center text-center lg:text-left space-y-6">
-
-							<div
-								className="inline-flex items-center gap-2 bg-blue-500/30 text-blue-50 text-xs font-bold px-3 py-1 rounded-full w-fit mx-auto lg:mx-0 backdrop-blur-sm border border-blue-400/30">
-								<Zap size={14} className="text-yellow-300"/>
-								<span>BLACK FRIDAY ANTECIPADA</span>
-							</div>
-
-							<h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-								Eleve sua performance <br/>
-								<span className="text-blue-200">ao próximo nível.</span>
-							</h2>
-
-							<p className="text-blue-100 text-lg md:text-xl max-w-xl mx-auto lg:mx-0 leading-relaxed">
-								Os melhores equipamentos esportivos com a qualidade que você merece.
-								Frete grátis para todo o Brasil na primeira compra.
-							</p>
-
-							<div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-								<Link
-									href="#products"
-									className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold py-4 px-8 rounded-xl hover:bg-blue-50 transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-blue-900/20"
-								>
-									Ver Ofertas
-									<ArrowRight size={20}/>
-								</Link>
-
-								<button
-									className="inline-flex items-center justify-center gap-2 bg-blue-800/40 text-white font-semibold py-4 px-8 rounded-xl hover:bg-blue-800/60 border border-blue-400/30 backdrop-blur-sm transition-all">
-									Saiba Mais
-								</button>
-							</div>
-
-							{/* Trust Indicators */}
-							<div
-								className="pt-8 flex items-center justify-center lg:justify-start gap-6 text-blue-200 text-sm font-medium">
-								<div className="flex items-center gap-2">
-									<ShieldCheck size={18}/>
-									<span>Garantia de 30 dias</span>
-								</div>
-								<div className="flex items-center gap-2">
-									<TrendingUp size={18}/>
-									<span>Produtos Oficiais</span>
-								</div>
-							</div>
-						</div>
-
-						{/* Conteudo da coluna da direita (imagem) */}
-						{/* Trocar imagem de destaque aqui */}
-						<div className="hidden lg:flex items-center justify-center relative">
-							<div
-								className="w-80 h-80 bg-gradient-to-tr from-blue-400 to-blue-300 rounded-full opacity-20 blur-3xl absolute animate-pulse"></div>
-							{/* Placeholder visual elegante usando CSS shapes para simular um produto em destaque */}
-							<div
-								className="relative w-full max-w-md h-64 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-500 flex flex-col justify-between">
-								<div className="h-4 w-1/3 bg-white/20 rounded-full mb-4"></div>
-								<div className="space-y-2">
-									<div className="h-3 w-full bg-white/10 rounded-full"></div>
-									<div className="h-3 w-5/6 bg-white/10 rounded-full"></div>
-									<div className="h-3 w-4/6 bg-white/10 rounded-full"></div>
-								</div>
-								<div className="mt-auto flex justify-between items-end">
-									<div className="h-8 w-20 bg-yellow-400/90 rounded-lg"></div>
-									<div className="h-10 w-10 bg-white/90 rounded-full"></div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+  const { user } = useAuth();
+  return (
+    <section className="w-full bg-gray-50/70 py-10">
+      <div className="container mx-auto px-4">
+        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-indigo-600 via-indigo-500 to-blue-600 p-8 md:p-14 shadow-md">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-indigo-400/30 blur-2xl" />
+            <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-blue-500/20 blur-3xl" />
+          </div>
+          <div className="relative flex flex-col gap-6 max-w-3xl">
+            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+              Tudo para sua próxima compra, fácil e rápido.
+            </h1>
+            <p className="text-indigo-100 text-base md:text-lg leading-relaxed">
+              Encontre produtos, gerencie carrinho e wishlist, e finalize sua compra com uma
+              experiência simples. Sem distrações, apenas o que importa.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <Link
+                href="/categories"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50 transition"
+              >
+                Explorar Categorias
+                <ArrowRight size={18} />
+              </Link>
+              {user ? (
+                <Link
+                  href="/wishlist"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-700/30 border border-indigo-300/30 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700/40 transition"
+                >
+                  Minha Wishlist
+                </Link>
+              ) : (
+                <Link
+                  href="/register"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-700/30 border border-indigo-300/30 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white hover:bg-indigo-700/40 transition"
+                >
+                  Criar Conta
+                </Link>
+              )}
+            </div>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-4 text-xs font-medium text-indigo-100">
+              <li className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-green-400" /> Checkout rápido
+              </li>
+              <li className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-yellow-300" /> Wishlist integrada
+              </li>
+              <li className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-blue-300" /> Perfil editável
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default HeroBanner;
